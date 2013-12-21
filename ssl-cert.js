@@ -38,4 +38,8 @@ var Ssl = function() {
         : '';
 
     if ( !subj ) throw '"subj" options are required';
+
+    //    check if ssl folder exists
+    ( !fs.existsSync( path.join(rootDir, 'ssl' ) ) ) && fs.mkdirSync( path.join( rootDir, 'ssl') );
+
 };
