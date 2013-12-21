@@ -41,5 +41,36 @@ var Ssl = function() {
 
     //    check if ssl folder exists
     ( !fs.existsSync( path.join(rootDir, 'ssl' ) ) ) && fs.mkdirSync( path.join( rootDir, 'ssl') );
+    
+    var   dfd_ca_key  = new _.Deferred()
+        , dfd_ca_cert = new _.Deferred()
+        , dfd_srv_key = new _.Deferred()
+        , dfd_srv_crt = new _.Deferred()
+        , dfd_no_pass = new _.Deferred();
 
+    var _this = this;
+
+    fs.exists( path.join( rootDir, opt.ca_key ), function(ex) {
+        dfd_ca_key.resolve(ex);
+    });
+    fs.exists( path.join( rootDir, opt.ca_cert ), function(ex) {
+        dfd_ca_cert.resolve(ex);
+    });
+    fs.exists( path.join( rootDir, opt.srv_key ), function(ex) {
+        dfd_srv_key.resolve(ex);
+    });
+    fs.exists( path.join( rootDir, opt.srv_crt ), function(ex) {
+        dfd_srv_crt.resolve(ex);
+    });
+    _.when( dfd_ca_key, dfd_ca_cert, dfd_srv_key,dfd_srv_crt ).done( function( ca_key, ca_crt, srv_key, srv_crt ) {
+
+        if ( ca_key && ca_crt && srv_key && srv_crt )  {
+
+
+        } else if ( !( ca_key || ca_crt || srv_key || srv_crt ) ) {
+
+
+        }
+        throw ' one or more specified files do not exist'
+    });
 };
