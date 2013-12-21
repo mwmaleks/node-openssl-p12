@@ -27,5 +27,15 @@ var Ssl = function() {
         srv_crt : ( args && args.srv_crt ) ? args.srv_crt : 'server.crt',
         srv_pwd : ( args && args.srv_pwd ) ? args.srv_pwd : 'server.pwd'
     };
+    var subj = ( args.country && args.state && args.city && args.company && args.division && args.domain && args.email ) ?
+        '/C='            + args.country +
+            '/ST='           + args.state +
+            '/L='            + args.city +
+            '/O='            + args.company +
+            '/OU='           + args.division +
+            '/CN='           + args.domain +
+            '/emailAddress=' + args.email
+        : '';
 
+    if ( !subj ) throw '"subj" options are required';
 };
