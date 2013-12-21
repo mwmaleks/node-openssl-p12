@@ -1,0 +1,24 @@
+{
+    "name": "ssl-cert",
+    "author": "Alexey Nosov <mwmaleks@gmx.com> (http://github.com/mwmaleks)",
+    "description": "self-signed ssl certificate generator for Node. JS",
+    "maintainers": [
+        "Alexey Nosov <mwmaleks@gmx.com> (http://github.com/mwmaleks)"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mwmaleks/ssl-cert.git"
+    },
+    "version": "0.0.1",
+    "private": false,
+    "dependencies": {
+
+    },
+    "keywords": [
+        "ssl",
+        "https",
+        "certificate",
+        "self-signed"
+    ],
+    "license": "MIT"
+}
