@@ -20,5 +20,9 @@
         "certificate",
         "self-signed"
     ],
+    "dependencies": {
+        "underscore.deferred": "*",
+        "underscore": "*"
+    },
     "license": "MIT"
 }
