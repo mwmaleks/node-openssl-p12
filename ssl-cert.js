@@ -21,7 +21,7 @@ var Ssl = function() {
     var args = arguments ? arguments[0] : '';
     var opt = {
         ca_key  : ( args && args.ca_key )  ? args.ca_key  : 'ca.key',
-        ca_crt : ( args && args.ca_crt )   ? args.ca_crt : 'ca.crt',
+        ca_crt  : ( args && args.ca_crt )  ? args.ca_crt  : 'ca.crt',
         ca_pwd  : ( args && args.ca_pwd )  ? args.ca_pwd  : 'ca.pwd',
         srv_key : ( args && args.srv_key ) ? args.srv_key : 'server.key',
         srv_crt : ( args && args.srv_crt ) ? args.srv_crt : 'server.crt',
@@ -47,10 +47,12 @@ var Ssl = function() {
         , dfd_srv_key = new _.Deferred()
         , dfd_srv_crt = new _.Deferred()
         , dfd_no_pass = new _.Deferred()
-        , dfd_create_all = new _.Deferred();
+        , dfd_create_all = new _.Deferred()
+        , dfd_complete_ssl = new Deferred();
 
     var _this = this;
 
+//  check if certificates files exists
     fs.exists( path.join( rootDir, opt.ca_key ), function(ex) {
         dfd_ca_key.resolve(ex);
     });
@@ -65,6 +67,7 @@ var Ssl = function() {
     });
     _.when( dfd_ca_key, dfd_ca_crt, dfd_srv_key,dfd_srv_crt ).done( function( ca_key, ca_crt, srv_key, srv_crt ) {
 
+//      in case all files exists verify them
         if ( ca_key && ca_crt && srv_key && srv_crt )  {
 
 //          verify CA certificate
@@ -72,7 +75,7 @@ var Ssl = function() {
 
 //              if CA ok verify server certificate
                 if ( valid_ca ) {
-                    verify.srv( opt.ca_crt, opt.srv_crt ).done( function(valid_srv) {
+                    verify.crt( opt.ca_crt, opt.srv_crt ).done( function(valid_srv) {
 
 //                  if server certificate is ok create no password certificate
                         if ( valid_srv ) {
@@ -96,16 +99,70 @@ var Ssl = function() {
 
         } else if ( !( ca_key || ca_crt || srv_key || srv_crt ) ) {
 
-// in case of there is no one file we create all
+//  in case of there is no one file we create all
             dfd_create_all.resolve();
 
         } else {
 //          some of the specified files not exist
             throw ' one or more specified files do not exist'
         }
+//      create certificates
         dfd_create_all.done( function() {
-            
-        }).fail();
 
+            var dfd_sign_server_crt = _.Deferred();
+            
+//          send options to this
+            _this.opt = opt;
+
+//          this method creates ca.key, ca.csr request, and self-signed ca.crt
+            _this.crate_ca().done( function() {
+
+                dfd_sign_server_crt.resolve();
+            }).fail( function(err) {
+
+                dfd_sign_server_crt.reject(err);
+            });
+
+//          this method creates server.key and server.csr request
+            _this.create_key_req().done( function() {
+
+                dfd_sign_server_crt.resolve();
+
+            }).fail(function(err) {
+
+                dfd_sign_server_crt.reject(err);
+            });
+
+            dfd_sign_server_crt.done( function() {
+
+//              this method signs server certificate by ca
+                _this.sign_crt().done( function() {
+
+//                  in case of signing correct only no password server crt to create left
+                    dfd_no_pass.resolve();
+                }).fail( function(err) {
+
+                    dfd_no_pass.reject(err);
+                });
+
+            }).fail(function(err) {
+                dfd_no_pass.reject(err);
+            });
+        }).fail( function(err) {
+            dfd_no_pass.reject(err);
+        });
     });
+    dfd_no_pass.done( function() {
+
+        _this.create_noPass().done( function() {
+
+            dfd_complete_ssl.resolve();
+
+        }).fail( function(err) {
+            dfd_complete_ssl.reject(err);
+        });
+    }).fail(function(err) {
+        dfd_complete_ssl.reject(err);
+    });
+    return dfd_complete_ssl;
 };
