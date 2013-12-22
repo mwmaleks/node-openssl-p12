@@ -131,7 +131,8 @@ var Ssl = function() {
 //      create certificates
         dfd_create_all.done( function() {
 
-            var dfd_sign_server_crt = _.Deferred();
+            var   dfd_ca    = _.Deferred()
+                , dfd_server = _.Deferred();
             
 //          send options to this
             _this.opt = opt;
@@ -139,26 +140,27 @@ var Ssl = function() {
 //          this method creates ca.key, ca.csr request, and self-signed ca.crt
             _this.create_ca().done( function() {
 
-                dfd_sign_server_crt.resolve();
+                dfd_ca.resolve();
             }).fail( function(err) {
 
-                dfd_sign_server_crt.reject(err);
+                dfd_ca.reject(err);
             });
 
 //          this method creates server.key and server.csr request
-            _this.create_key_req().done( function() {
-
-                dfd_sign_server_crt.resolve();
+            _this.create_key_req( opt.srv_key ).done( function( server_pwd_command ) {
+                _this.srv_pwd_command = server_pwd_command;
+                dfd_server.resolve();
 
             }).fail( function(err) {
 
-                dfd_sign_server_crt.reject(err);
+                    dfd_server.reject(err);
             });
 
-            dfd_sign_server_crt.done( function() {
+            _.when( dfd_ca, dfd_server ).done( function() {
 
 //              this method signs server certificate by ca
-                _this.sign_crt().done( function() {
+
+                _this.sign_crt( opt.srv_key ).done( function() {
 
 //                  in case of signing correct only no password server crt to create left
                     dfd_no_pass.resolve();
@@ -189,6 +191,30 @@ var Ssl = function() {
     return dfd_complete_ssl;
 };
 
+function save_pwd( password, key) {
+
+    var   dfd_pwd = _.Deferred()
+        , pwd = [];
+
+    var pwd_file = password ? path.join( rootDir, 'ssl', key + '.txt') : false;
+
+    if ( pwd_file ) {
+        fs.writeFile( pwd_file, password, function(err) {
+
+            if ( err ) {
+                console.log( 'Error when saving password' );
+                dfd_pwd.reject(err);
+            }
+            pwd.push('-passout');
+            pwd.push('file:' + pwd_file );
+            dfd_pwd.resolve(pwd);
+        });
+    } else {
+        pwd.push('-nodes');
+        dfd_pwd.resolve(pwd);
+    }
+    return dfd_pwd;
+}
 
 function complete_ssl ( ssl_command, pwd ) {
 
@@ -210,100 +236,146 @@ function complete_ssl ( ssl_command, pwd ) {
     return _dfd;
 }
 
-Ssl.prototype.create_ca = function() {
-    
-    var opt = this.opt;
 
-    var   dfd_pwd       = _.Deferred()
-        , dfd_ca_key    = _.Deferred()
-        , dfd_ca_csr    = _.Deferred()
-        , dfd_ca_sign   = _.Deferred()
+//this method creates ca.key, ca.csr request, and self-signed ca.crt
+Ssl.prototype.create_ca = function() {
+
+    var   dfd_ca = _.Deferred()
         , _this = this;
+
+    this.create_key_req( this.opt.ca_key, this.opt.ca_pwd ).done( function( pwd ) {
+        _this.ca_pwd_command = pwd;
+        dfd_ca.resolve();
+
+    }).fail( function() {
+
+        dfd_ca.reject();
+    });
+    return dfd_ca;
+};
+
+//this method creates .key and .csr request for any
+Ssl.prototype.create_key_req = function( key, password ) {
+
+    var   opt = this.opt
+        , _this = this;
+
+    var   dfd_key    = _.Deferred()
+        , dfd_csr    = _.Deferred();
 
     var ssl_command = [
         'genrsa',
-        '--des3','-out',
+        '--des3',
+        '-out',
         path.join( rootDir, 'ssl', opt.ca_key),
-        2048 ],
-        pwd = [];
+        2048 ];
 
-    var pwd_file = opt.ca_pwd ? path.join( rootDir, 'ssl/ca_pwd.txt') : false;
-
-    if ( pwd_file ) {
-        fs.writeFile( pwd_file, opt.ca_pwd, function(err) {
-
-            if ( err ) {
-                console.log( 'Error when saving password to temp file' );
-                throw err;
-            }
-            pwd.push('-passout');
-            pwd.push('file:' + pwd_file );
-            dfd_pwd.resolve();
-        });
-    } else {
-        pwd.push('-nodes');
-        dfd_pwd.resolve();
-    }
-    dfd_pwd.done( function() {
+    save_pwd( password, key ).done( function(pwd) {
+        _this._pwd = pwd;
         complete_ssl( ssl_command, pwd ).done( function() {
 
-            dfd_ca_key.resolve();
+            dfd_key.resolve();
 
         }).fail( function(err) {
-                dfd_ca_key.reject(err);
-        });
+                dfd_key.reject(err);
+            });
     });
-    dfd_ca_key.done( function() {
-
+    dfd_key.done( function() {
+        console.log(rootDir, 'ssl', key );
         var ssl_command = [
             'req',
-            '-new','-key',
-            path.join( rootDir, 'ssl', opt.ca_key), '-subj',
-            _this.subj, '-out',
-            path.join( rootDir, 'ssl', opt.ca_key.splice( path.extname( opt.ca_key ) )[0] + '.csr')
+            '-new',
+            '-key',
+            path.join( rootDir, 'ssl', key ),
+            '-subj',
+            _this.subj,
+            '-out',
+            path.join( rootDir, 'ssl', key.split( path.extname( key ) )[0] + '.csr')
         ];
-        complete_ssl( ssl_command, pwd).done( function() {
+        complete_ssl( ssl_command, _this._pwd ).done( function() {
 
-            dfd_ca_csr.resolve();
+            dfd_csr.resolve( _this._pwd );
         }).fail( function(err) {
 
-            dfd_ca_csr.reject(err);
-        });
+                dfd_csr.reject(err);
+            });
 
     }).fail( function(err) {
 
-            dfd_ca_csr.reject(err);
+            dfd_csr.reject(err);
     });
-    dfd_ca_csr.done( function() {
-
-        var ssl_command = [
-            'x509',
-            '-req','-days',
-            opt.days, '-in',
-            path.join( rootDir, 'ssl', opt.ca_key.splice( path.extname( opt.ca_key ) )[0] + '.csr' ), '-out',
-            path.join( rootDir, 'ssl', opt.ca_key.splice( path.extname( opt.ca_key ) )[0] + '.crt' ), '-signkey',
-            path.join( rootDir, 'ssl', opt.ca_key )
-        ];
-
-        complete_ssl( ssl_command,pwd ).done( function() {
-
-            dfd_ca_sign.resolve();
-
-        }).fail( function() {
-
-            dfd_ca_sign.reject();
-        });
-    }).fail( function() {
-
-        dfd_ca_sign.reject();
-    });
-    return dfd_ca_sign;
+    return dfd_csr;
 };
 
-Ssl.prototype.create_key_req = function() {};
+Ssl.prototype.sign_crt = function( ca, crt, serial ) {
 
-Ssl.prototype.sign_crt = function() {};
+    var   dfd_sign = _.Deferred()
+        , _this = this
+        , opt = this.opt;
 
-Ssl.prototype.create_noPass = function() {};
+    var ssl_command = ca ?
+        [
+            'x509',
+            '-req',
+            '-days',
+            opt.days,
+            '-in',
+            path.join( rootDir, 'ssl', opt.ca_key.split( path.extname( opt.ca_key ) )[0] + '.csr' ),
+            '-out',
+            path.join( rootDir, 'ssl', opt.ca_key.split( path.extname( opt.ca_key ) )[0] + '.crt' ),
+            '-signkey',
+            path.join( rootDir, 'ssl', opt.ca_key )
+        ] :
+        [
+            'x509',
+            '-req',
+            '-days',
+            opt.days,
+            '-in',
+            path.join( rootDir, 'ssl', crt.split( path.extname( crt ) )[0] + '.csr' ),
+            '-CA',
+            path.join( rootDir, 'ssl', opt.ca_crt),
+            '-CAkey', path.join( rootDir, 'ssl', opt.ca_key ),
+            '-set_serial',
+            serial,
+            '-out',
+            path.join( rootDir, 'ssl', crt.split( path.extname( crt ) )[0] + '.crt' )
+        ];
+
+    complete_ssl( ssl_command, _this.ca_pwd_command ).done( function() {
+
+        dfd_sign.resolve();
+
+    }).fail( function() {
+
+        dfd_sign.reject();
+    });
+    return dfd_sign;
+};
+
+Ssl.prototype.create_noPass = function() {
+
+    var   dfd_noPass = _.Deferred()
+        , _this = this
+        , opt = this.opt;
+
+    var ssl_command = [
+        'rsa',
+        '-in',
+        path.join( rootDir, 'ssl', opt.srv_key ),
+        '-out',
+        path.join( rootDir, 'ssl', opt.srv_key.split( path.extname( opt.srv_key ) )[0] + '.nopass.key' )
+    ];
+
+    complete_ssl( ssl_command, _this.srv_pwd_command ).done( function() {
+
+        dfd_noPass.resolve();
+
+    }).fail( function() {
+
+        dfd_noPass.reject();
+    });
+
+};
 
 exports.Ssl = Ssl;
