@@ -12,6 +12,31 @@ var   spawn =   require('child_process').spawn
 
 _.mixin( require('underscore.deferred') );
 
+var verify = {
+    ssl_command: [],
+    ca : function( crt ) {
+
+//        var   _dfd = _.Deferred()
+//            ,openssl = spawn;
+//        var ca = spawn( 'openssl', ['verify', path.join( rootDir, 'ssl', crt ) ] );
+//
+//        ca.on( 'exit', function() {
+//
+//            _dfd.resolve();
+//        });
+//
+//        ca.stderr.on('data', function(err){
+//
+//            _dfd.reject(err);
+//        });
+        return true;
+    },
+    crt : function( ca_crt, crt) {
+        return true;
+    }
+};
+
+
 var Ssl = function() {
 
     var args = arguments ? arguments[0] : '';
@@ -45,7 +70,7 @@ var Ssl = function() {
         , dfd_srv_crt = new _.Deferred()
         , dfd_no_pass = new _.Deferred()
         , dfd_create_all = new _.Deferred()
-        , dfd_complete_ssl = new Deferred();
+        , dfd_complete_ssl = new _.Deferred();
 
     var _this = this;
 
@@ -153,7 +178,7 @@ var Ssl = function() {
 
         _this.create_noPass().done( function() {
 
-            dfd_complete_ssl.resolve();
+            dfd_complete_ssl.resolve(_this);
 
         }).fail( function(err) {
             dfd_complete_ssl.reject(err);
@@ -165,6 +190,25 @@ var Ssl = function() {
 };
 
 
+function complete_ssl ( ssl_command, pwd ) {
+
+    var _dfd = _.Deferred();
+
+    ssl_command.push(pwd);
+    _.flatten( ssl_command );
+    var ca = spawn( 'openssl', ssl_command );
+
+    ca.on( 'exit', function() {
+
+        _dfd.resolve();
+    });
+
+    ca.stderr.on('data', function(err){
+
+        _dfd.reject(err);
+    });
+    return _dfd;
+}
 
 Ssl.prototype.create_ca = function() {
     
@@ -175,25 +219,6 @@ Ssl.prototype.create_ca = function() {
         , dfd_ca_csr    = _.Deferred()
         , dfd_ca_sign   = _.Deferred()
         , _this = this;
-
-    function complete_ssl (ssl_command) {
-
-        var _dfd = _.Deferred();
-
-        _.flatten( ssl_command.push(pwd) );
-        var ca_csr = spawn( 'openssl', ssl_command );
-
-        ca_csr.on( 'exit', function() {
-
-            _dfd.resolve();
-        });
-
-        ca_csr.stderr.on('data', function(err){
-
-            _dfd.reject(err);
-        });
-        return _dfd;
-    }
 
     var ssl_command = [
         'genrsa',
@@ -220,11 +245,11 @@ Ssl.prototype.create_ca = function() {
         dfd_pwd.resolve();
     }
     dfd_pwd.done( function() {
-        complete_ssl( function() {
+        complete_ssl( ssl_command, pwd ).done( function() {
 
             dfd_ca_key.resolve();
 
-        }).done.fiail( function(err) {
+        }).fail( function(err) {
                 dfd_ca_key.reject(err);
         });
     });
@@ -237,7 +262,7 @@ Ssl.prototype.create_ca = function() {
             _this.subj, '-out',
             path.join( rootDir, 'ssl', opt.ca_key.splice( path.extname( opt.ca_key ) )[0] + '.csr')
         ];
-        complete_ssl(ssl_command).done( function() {
+        complete_ssl( ssl_command, pwd).done( function() {
 
             dfd_ca_csr.resolve();
         }).fail( function(err) {
@@ -260,7 +285,7 @@ Ssl.prototype.create_ca = function() {
             path.join( rootDir, 'ssl', opt.ca_key )
         ];
 
-        complete_ssl(ssl_command).done( function() {
+        complete_ssl( ssl_command,pwd ).done( function() {
 
             dfd_ca_sign.resolve();
 
@@ -268,7 +293,7 @@ Ssl.prototype.create_ca = function() {
 
             dfd_ca_sign.reject();
         });
-    }).fail(function() {
+    }).fail( function() {
 
         dfd_ca_sign.reject();
     });
@@ -280,3 +305,5 @@ Ssl.prototype.create_key_req = function() {};
 Ssl.prototype.sign_crt = function() {};
 
 Ssl.prototype.create_noPass = function() {};
+
+exports.Ssl = Ssl;
