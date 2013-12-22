@@ -16,10 +16,12 @@ var ssl_options = {
            country: 'RU',
            state: 'Krasnodar',
            city: 'Krasnosar',
-           company: 'Pilotbook',
-           division: 'Pilotbook',
-           domain :'pilotbook.ru',
-           email: 'admin@pilotbook.ru'
+           company: 'somecompany',
+           division: 'somecompany',
+           domain :'somedomain.ru',
+           email: 'admin@somedomain.ru',
+           ca_pwd: 'qwerty123',
+           srv_pwd: 'qwerty123'
 };
 
 
