@@ -23,7 +23,8 @@
     "dependencies": {
         "guid": "*",
         "underscore.deferred": "*",
-        "underscore": "*"
+        "underscore": "*",
+        "winston": "*"
     },
     "license": "MIT"
 }
