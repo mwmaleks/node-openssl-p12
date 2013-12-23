@@ -37,7 +37,10 @@ var dfd = _.Deferred();
        })
        .then(getC)
        .then(function(v) {
-           console.log(v);
+           return 'res:' + v;
+       })
+       .done(function(d) {
+           console.log(d); // return res: 13
        })
    ;
 
