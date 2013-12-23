@@ -21,10 +21,8 @@
         "self-signed"
     ],
     "dependencies": {
-        "guid": "*",
         "underscore.deferred": "*",
-        "underscore": "*",
-        "winston": "*"
+        "underscore": "*"
     },
     "license": "MIT"
 }
