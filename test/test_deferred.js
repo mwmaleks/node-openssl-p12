@@ -30,6 +30,7 @@ function getC(c) {
 
 
 
+function name () {
 var dfd = _.Deferred();
    dfd.then(null, getA)
        .then(function(b) {
@@ -45,3 +46,6 @@ var dfd = _.Deferred();
    ;
 
 dfd.reject(1);
+}
+
+exports.name = name;

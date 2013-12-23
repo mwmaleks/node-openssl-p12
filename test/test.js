@@ -20,7 +20,9 @@ var options = {
 };
 
 createClientSSL(options).done( function(fingerprint) {
+    console.log('-------------');
     console.log('client\'s ', options.clientFileName, ' .key, .csr, .crt, .p12 created. SHA-1 fingerprint is:', fingerprint );
 }).fail( function(err) {
-    console.log(err);
+    console.log('-------------');
+    console.log('ERORS: ', err);
 });
