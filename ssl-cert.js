@@ -5,11 +5,8 @@
 var   spawn =   require('child_process').spawn
     , _ =       require('underscore')
     , fs =      require('fs')
-//    , os =      require('os')
     , rootDir = process.cwd()
-    , path =    require('path')
-    , Guid = require('guid')
-    , log = require('./lib/utils').log;
+    , path =    require('path');
 
 _.mixin( require('underscore.deferred') );
 
@@ -30,7 +27,7 @@ var verify = {
         });
 
         ca.stderr.on('data', function(err){
-            log.error('verify ca');
+            console.error('verify ca');
             _dfd.reject(err);
         });
         return _dfd;
@@ -50,7 +47,7 @@ var verify = {
         });
 
         ca.stderr.on('data', function(err){
-            log.error('verify crt');
+            console.error('verify crt');
             _dfd.reject(err);
         });
         return _dfd;
@@ -223,7 +220,7 @@ function save_pwd( password, key) {
         fs.writeFile( pwd_file, password, function(err) {
 
             if ( err ) {
-                log.error('Error when saving password' );
+                console.error('Error when saving password' );
                 dfd_pwd.reject(err);
             }
             pwd.push(' -passout');
