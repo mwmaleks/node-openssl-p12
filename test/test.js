@@ -22,22 +22,27 @@ var options = {
     clientPass: '1905',
     caFileName: 'ca',
     serial: '02',
-    days: 365
+    days: 365,
+    bitSize: 2048
 };
 
-createClientKey(options).done( function(arg) {
+createClientKey(options).done( function() {
 
+    console.log('createClientKey arguments = '.green, arguments);
     console.log('createClientKey: '.green, 'Done!'.yellow);
 
     createCSR(options).done( function() {
+        console.log('createCSR arguments = '.green, arguments);
 
         console.log('createCSR: '.green, 'Done!'.yellow);
 
         createClientCRT(options).done( function() {
+            console.log('createClientCRT arguments = '.green, arguments);
 
             console.log('createClientCRT: '.green, 'Done!'.yellow);
 
             createPKS12(options).done( function() {
+                console.log('createPKS12 arguments = '.green, arguments);
 
                 console.log('createPKS12: '.green, 'Done!'.yellow);
 
