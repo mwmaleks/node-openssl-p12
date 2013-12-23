@@ -10,11 +10,11 @@ function getA(a) {
     return deferred;
 }
 
-function getB(b) {
+function getB(a, c, b) {
     var deferred = _.Deferred();
     console.log('b', b, b + 3);
     setTimeout(function() {
-        deferred.resolve(b + 3);
+        deferred.resolve(b + 3 - a + c);
     }, 200);
     return deferred;
 }
@@ -32,7 +32,9 @@ function getC(c) {
 
 var dfd = _.Deferred();
    dfd.then(null, getA)
-       .then(getB)
+       .then(function(b) {
+           return getB(2, 5, b);
+       })
        .then(getC)
        .then(function(v) {
            console.log(v);
