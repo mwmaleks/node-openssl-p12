@@ -3,7 +3,8 @@
     "author": "Alexey Nosov <mwmaleks@gmx.com> (http://github.com/mwmaleks)",
     "description": "self-signed ssl certificate generator for Node. JS",
     "maintainers": [
-        "Alexey Nosov <mwmaleks@gmx.com> (http://github.com/mwmaleks)"
+        "Alexey Nosov <mwmaleks@gmx.com> (http://github.com/mwmaleks)",
+        "Akhmethanov Pavel <pavel-power@ya.ru> (http://github.com/pavelpower)"
     ],
     "repository": {
         "type": "git",
@@ -11,9 +12,6 @@
     },
     "version": "0.0.1",
     "private": false,
-    "dependencies": {
-
-    },
     "keywords": [
         "ssl",
         "https",
