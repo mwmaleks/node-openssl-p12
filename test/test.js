@@ -19,12 +19,12 @@ var options = {
 //    days: 365
 };
 
-createClientSSL(options).done( function( options, fingerprint ) {
+createClientSSL(options).then( function( options, fingerprint ) {
     console.log('-------------');
-    console.log('createCRT:',options);
+    console.log('createCRT:', options );
     console.log('-------------');
     console.log(' *.key, *.csr, *.crt, *.p12 created. SHA-1 fingerprint is:', fingerprint );
-}).fail( function(err) {
+} ,function(err) {
     console.log('-------------');
     console.log('ERORS: ', err);
 });
