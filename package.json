@@ -1,5 +1,5 @@
 {
-    "name": "ssl-cert",
+    "name": "openssl-p12",
     "author": "Alexey Nosov <mwmaleks@gmx.com> (http://github.com/mwmaleks)",
     "description": "self-signed ssl certificate generator for Node. JS",
     "maintainers": [
