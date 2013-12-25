@@ -38,10 +38,10 @@ p12(p12options).done(function(options, sha1fingerprint) {
 
 ### Description
 This is an easy api client's ssl-certificate generator. openssl-p12 creates
-client's ssl-certificate for HTTPS authentication and authorization. You'll need /ssl folder
-in your project rootDir and ca.key, ca.crt (Certificate Authority) files to
-sign up your client's certificates. The results of openssl-p12 are *.p12 (PKC12) file and SHA-1
-fingerprint of client's certificate.
+client's ssl-certificate for HTTPS authentication and authorization. You'll need `/ssl` folder
+in your project rootDir and `ca.key` , `ca.crt` (Certificate Authority) files to
+sign up your client's certificates. The results of openssl-p12 are `*.p12` (PKC12) file and SHA-1
+client certificate's fingerprint.
 
 
 ### HTTPS authorization example
@@ -73,10 +73,10 @@ app.get('/', someHttpsMiddleWare, function (req, res) {
    if ( sha1fingerprint === req.connection.getPeerCertificate().fingerprint ) {
         res.send('Authorized User!');
    } else {
-        res.send('Unauthorized User!')
+        res.send('Unauthorized User!');
    }
 });
-var server = https.createServer(options, app).listen(port, function(){
+var server = https.createServer(options, app).listen(port, function() {
   console.log('Express server listening on port ' + port);
 });
 ```
