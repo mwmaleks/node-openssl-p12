@@ -11,9 +11,10 @@ client's ssl certificate generator for Node JS
   ```
 ### Use
 
-  ```js
+```js
   var p12 = require('openssl-p12').createClientSSL;
   var p12options = {
+    bitSize: 2048,
     clientFileName :'client001',
     C:'EX',
     ST: 'Example',
@@ -33,8 +34,7 @@ p12(p12options).done(function(options, sha1fingerprint) {
 }).fail( function(err) {
     console.log(err);
 });
-
-  ```
+```
 
 ### Description
 This is an easy api client's ssl-certificate generator. openssl-p12 creates
