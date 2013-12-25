@@ -8,12 +8,15 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/mwmaleks/ssl-cert.git"
+        "url": "https://github.com/mwmaleks/openssl-p12.git"
     },
     "version": "0.0.1",
     "private": false,
     "keywords": [
         "ssl",
+        "pem",
+        "PKC12",
+        "p12",
         "https",
         "certificate",
         "self-signed"
