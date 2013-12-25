@@ -1,5 +1,4 @@
-openssl-p12
-===
+##openssl-p12
 
 client's ssl certificate generator for Node JS
 
@@ -38,13 +37,13 @@ p12(p12options).done(function(options, sha1fingerprint) {
 
 ### Description
 This is an easy api client's ssl-certificate generator. openssl-p12 creates
-client's ssl-certificate for HTTPS authentication and authorization. You'll need `/ssl` folder
+client's ssl-certificate for HTTPS authentication and identification. You'll need `/ssl` folder
 in your project rootDir and `ca.key` , `ca.crt` (Certificate Authority) files to
 sign up your client's certificates. The results of openssl-p12 are `*.p12` (PKC12) file and SHA-1
 client certificate's fingerprint.
 
 
-### HTTPS authorization example
+### HTTPS authentication example
 
 ```js
 var fs = require('fs'),
@@ -82,10 +81,10 @@ var server = https.createServer(options, app).listen(port, function() {
 ```
 You will also need someHttpsMiddleWare (this one for example https://github.com/tgies/client-certificate-auth)
 
-Now all visitors those how do not have ssl-certificate install into there browsers are rejected, all those how have certificates can visit your https
+Now all visitors those having not ssl-certificate installed into there browsers are rejected, all those how have certificates can visit your https
 protected pages, but only that one how has certificate with exact SHA-1 fingerprint you remembered when create this
 certificate might be allowed to page 'Authorized User!' So you can maintain your users' data base with SHA-1 fingerprints,
-granting different HTTPS access.
+granting different HTTPS access rights.
 
 ### Options description
 
