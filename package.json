@@ -19,7 +19,7 @@
         "self-signed"
     ],
     "dependencies": {
-        "underscore.deferred": "*",
+        "underscore.deferred": "*"
     },
     "license": "MIT"
 }
