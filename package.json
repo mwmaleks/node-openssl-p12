@@ -19,7 +19,11 @@
         "p12",
         "https",
         "certificate",
-        "self-signed"
+        "self signed",
+        "SPKAC",
+        "spkac",
+        "<keygen />",
+        "keygen"
     ],
     "dependencies": {
         "underscore.deferred": "*"
