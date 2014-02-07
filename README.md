@@ -1,6 +1,6 @@
 ##openssl-p12
 
-client's ssl certificate generator for Node JS
+client's ssl certificate generator for Node JS based on OpenSSL 
 
 ### Synopsis
 
