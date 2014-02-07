@@ -1,7 +1,9 @@
 {
     "name": "openssl-p12",
-    "author": "Alexey Nosov <mwmaleks@gmx.com> (http://github.com/mwmaleks)",
+    
+    "version": "0.1.1",
     "description": "openssl based client certificate generator for node JS",
+    "author": "Alexey Nosov <mwmaleks@gmx.com> (http://github.com/mwmaleks)",
     "maintainers": [
         "Alexey Nosov <mwmaleks@gmx.com> (http://github.com/mwmaleks)",
         "Akhmethanov Pavel <pavel-power@ya.ru> (http://github.com/pavelpower)"
@@ -10,7 +12,6 @@
         "type": "git",
         "url": "https://github.com/mwmaleks/openssl-p12.git"
     },
-    "version": "0.1.1",
     "private": false,
     "keywords": [
         "ssl",
