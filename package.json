@@ -1,7 +1,8 @@
 {
     "name": "node-openssl-p12",
-    "version": "0.1.1",
+    "version": "0.1.4",
     "description": "openssl based client certificate generator for node JS",
+    "main": "index.js",
     "author": "Alexey Nosov <mwmaleks@gmx.com> (http://github.com/mwmaleks)",
     "maintainers": [
         "Alexey Nosov <mwmaleks@gmx.com> (http://github.com/mwmaleks)",
