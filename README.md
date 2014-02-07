@@ -90,7 +90,7 @@ and put `ca.key` , `ca.crt` (Certificate Authority) files, those
 are to sign your client certificates. If you use the certificate signed by some third party
 use `server.key` and `server.crt`
 
-Perform these commands in `ssl` folde.
+Perform these commands in `ssl` folder.
 
 ```
 $ mkdir db
@@ -103,7 +103,7 @@ It creates your certificates' data base.
 
 Then create `ca.config`
 ```
-vim ca.config
+$ vim ca.config
 ```
 
 and put this code inside:
