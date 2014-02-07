@@ -1,4 +1,4 @@
-##openssl-p12
+##node-openssl-p12
 
 client's ssl certificate generator for Node JS based on OpenSSL 
 
@@ -7,7 +7,7 @@ client's ssl certificate generator for Node JS based on OpenSSL
 If your application require the client's authentication 
 by SSL ceritficate this would be great if the server 
 generate and sign clint's certificates automatically and then send 
-it to back client. openssl-p12 allows you to implement this in two ways.
+it to back client. node-openssl-p12 allows you to implement this in two ways.
 
 ### Description
 
@@ -26,11 +26,11 @@ by SHA-1 fingerprint as well. This is possible by calling:
 `req.connection.getPeerCertificate().fingerprint`
 
 Before rendering the private page you just compare this fingerprint with those you saved as
-result of openssl-p12 work.
+result of node-openssl-p12 work.
 
 The second way (most preferred) is about using `<keygen />` HTML5 tag (or google it for EE). 
 `<keygen />` genereates a pair of private an public key. The public key is sent to the server with the form data 
-which `<keygen />` tag was placed into. openssl-p12 use this key to create CPKAC, and certificate 
+which `<keygen />` tag was placed into. node-openssl-p12 use this key to create CPKAC, and certificate 
 file that is should be sent back to the browser as response with the header 
 `'Content-Type': 'application/x-x509-user-cert'`. This is the perfect way to free up users of knowledge how to install
 ssl certificate into the browser. The fingerprint is also generated and saved for further usage. 
@@ -41,7 +41,7 @@ This second way implemented using both self signed CA and valid SLL signed by so
 ### Install
 
   ```
-  npm install openssl-p12
+  npm install node-openssl-p12
   ```
 ### Use the first way (PKC12)
 
@@ -53,7 +53,7 @@ are to sign your client certificates.
 
 
 ```js
-  var p12 = require('openssl-p12').createClientSSL;
+  var p12 = require('node-openssl-p12').createClientSSL;
   var p12options = {
     bitSize: 2048,
     clientFileName :'client001',
@@ -144,7 +144,7 @@ your `*.crt` and `.key` files you use.
 
 
 ```js
-  var p12 = require('openssl-p12').createClientSSL;
+  var p12 = require('node-openssl-p12').createClientSSL;
   var p12options = {
     clientFileName :'client001',
     C:'EX',
@@ -234,7 +234,7 @@ var app = express();
 
 /* express options are avoided */
 
-// SHA-1 fingerprint is openssl-p12 result that might be linked to exact user
+// SHA-1 fingerprint is node-openssl-p12 result that might be linked to exact user
 var sha1fingerprint = 'CF:D4:95:58:04:9B:76:73:DC:EE:07:88:27:B0:48:1E:16:9D:F1:F9';
 
 app.get('/', someHttpsMiddleWare, function (req, res) {
