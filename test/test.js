@@ -2,7 +2,7 @@
  * Created by mwmaleks on 21.12.13.
  */
 
-var createClientSSL     = require('../lib/openssl-p12').createClientSSL;
+var createClientSSL     = require('../lib/node-openssl-p12').createClientSSL;
 
 var options = {
     clientFileName :'client001',
