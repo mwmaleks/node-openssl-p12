@@ -1,24 +1,22 @@
 {
-    "name": "openssl-p12",
+    "name": "node-openssl-p12",
+    "version": "0.1.1",
+    "description": "openssl based client certificate generator for node JS",
     "author": "Alexey Nosov <mwmaleks@gmx.com> (http://github.com/mwmaleks)",
-    "description": "self-signed ssl certificate generator for Node. JS",
     "maintainers": [
         "Alexey Nosov <mwmaleks@gmx.com> (http://github.com/mwmaleks)",
         "Akhmethanov Pavel <pavel-power@ya.ru> (http://github.com/pavelpower)"
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/mwmaleks/openssl-p12.git"
+        "url": "https://github.com/mwmaleks/node-openssl-p12.git"
     },
-    "version": "0.1.3",
     "private": false,
     "keywords": [
         "ssl",
-        "pem",
         "PKC12",
         "p12",
         "https",
-        "certificate",
         "self signed",
         "SPKAC",
         "spkac",
@@ -28,5 +26,6 @@
     "dependencies": {
         "underscore.deferred": "*"
     },
+    "readmeFilename" : "README.md",
     "license": "MIT"
 }
