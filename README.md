@@ -4,10 +4,10 @@ client's ssl certificate generator for Node JS based on OpenSSL
 
 ### Synopsis
 
-If your application require the client's authentication 
+If your application requires the client's authentication 
 by SSL ceritficate this would be great if the server 
 generate and sign clint's certificates automatically and then send 
-it to back client. node-openssl-p12 allows you to implement this in two ways.
+it back to client. node-openssl-p12 allows you to implement this in two ways.
 
 ### Description
 
@@ -99,7 +99,7 @@ $ mkdir db/newcerts
 $ touch db/index.txt
 $ echo "02" > db/serial
 ```
-It creates your certificates' data base.
+It creates your certificates' database.
 
 Then create `ca.config`
 ```
@@ -140,7 +140,7 @@ emailAddress = optional
 
 IMPORTANT:
 `certificate` and `private_key` options should be specified with 
-your `*.crt` and `.key` files you use.
+your `*.crt` and `*.key` files you use.
 
 
 ```js
@@ -154,7 +154,6 @@ your `*.crt` and `.key` files you use.
     OU: 'Example',
     CN: 'Example',
     emailAddress: 'example@example.ex',
-    organizationName: 'Example',
     days: 365
     publicKey: req.body.public_key // a long string from <keygen /> tag
 };
@@ -188,7 +187,7 @@ fs.readFile( path.join( rootDir, 'ssl', 'client001'), function(err, data) {
     });
 ```
 NOTE:
-If you discover an error after second certificate 
+If you discover an error after then second certificate generation
 open `/ssl/db/index.txt.attr` and switch `unique_subject = no`
 
 
@@ -207,7 +206,6 @@ open `/ssl/db/index.txt.attr` and switch `unique_subject = no`
 * `caFileName:` CA files name (without extension), both files *.key and *.crt should exist (defaults to 'ca')
 * `serial:` Client certificate serial number (defaults to '01')
 * `days:` Client certificate valid period (defaults to 365)
-* `organizationName:` CSR organisation name, no defaults
 * `publicKey:` public key - `req.body.public_key` from `<keygen name= "public_key"/>`
 
 ### HTTPS authentication example
