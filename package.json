@@ -42,11 +42,5 @@
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/mwmaleks/node-openssl-p12/issues"
-    },
-    "_id": "node-openssl-p12@0.1.7",
-    "dist": {
-        "shasum": "9f0a1167695853e62ee798c8e9796728846be039"
-    },
-    "_from": "node-openssl-p12@0.1.7",
-    "_resolved": "https://registry.npmjs.org/node-openssl-p12/-/node-openssl-p12-0.1.7.tgz"
+    }
 }
