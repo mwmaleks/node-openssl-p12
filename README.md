@@ -154,7 +154,6 @@ your `*.crt` and `.key` files you use.
     OU: 'Example',
     CN: 'Example',
     emailAddress: 'example@example.ex',
-    organizationName: 'Example',
     days: 365
     publicKey: req.body.public_key // a long string from <keygen /> tag
 };
@@ -207,7 +206,6 @@ open `/ssl/db/index.txt.attr` and switch `unique_subject = no`
 * `caFileName:` CA files name (without extension), both files *.key and *.crt should exist (defaults to 'ca')
 * `serial:` Client certificate serial number (defaults to '01')
 * `days:` Client certificate valid period (defaults to 365)
-* `organizationName:` CSR organisation name, no defaults
 * `publicKey:` public key - `req.body.public_key` from `<keygen name= "public_key"/>`
 
 ### HTTPS authentication example
