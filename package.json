@@ -3,22 +3,10 @@
     "version": "0.1.8",
     "description": "openssl based client certificate generator for node JS",
     "main": "index.js",
-    "author": {
-        "name": "Alexey Nosov",
-        "email": "mwmaleks@gmx.com",
-        "url": "http://github.com/mwmaleks"
-    },
+    "author": "Alexey Nosov <mwmaleks@gmx.com> (http://github.com/mwmaleks)",
     "maintainers": [
-        {
-            "name": "Alexey Nosov",
-            "email": "mwmaleks@gmx.com",
-            "url": "http://github.com/mwmaleks"
-        },
-        {
-            "name": "Akhmethanov Pavel",
-            "email": "pavel-power@ya.ru",
-            "url": "http://github.com/pavelpower"
-        }
+        "Alexey Nosov <mwmaleks@gmx.com> (http://github.com/mwmaleks)",
+        "Akhmethanov Pavel <pavel-power@ya.ru> (http://github.com/pavelpower)"
     ],
     "repository": {
         "type": "git",
@@ -39,8 +27,5 @@
         "underscore.deferred": "*"
     },
     "readmeFilename": "README.md",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/mwmaleks/node-openssl-p12/issues"
-    }
+    "license": "MIT"
 }
