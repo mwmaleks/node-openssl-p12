@@ -83,7 +83,7 @@ or `clientFileName` files should be removed before the next `createClientSSL` ca
 `*.p12` file saved in `ssl` folder. All done.
 
 
-### Use the second way (<keygen /> and SPKAC)
+### Use the second way (keygen and SPKAC)
 
 Create `/ssl` folder in your project rootDir
 and put `ca.key` , `ca.crt` (Certificate Authority) files, those 
