@@ -167,7 +167,7 @@ p12(p12options).done(function(options, sha1fingerprint) {
 });
 ```
 NOTE: if you provide `publicKey` string `createClientSSL` works completely 
-different way suitable only for `<ketgen />` case.
+different way suitable only for `<keygen />` case.
 
 
 All done. Now just send the file back to the browser like this:
