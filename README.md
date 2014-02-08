@@ -4,10 +4,10 @@ client's ssl certificate generator for Node JS based on OpenSSL
 
 ### Synopsis
 
-If your application require the client's authentication 
+If your application requires the client's authentication 
 by SSL ceritficate this would be great if the server 
 generate and sign clint's certificates automatically and then send 
-it to back client. node-openssl-p12 allows you to implement this in two ways.
+it back to client. node-openssl-p12 allows you to implement this in two ways.
 
 ### Description
 
