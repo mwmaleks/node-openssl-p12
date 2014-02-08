@@ -99,7 +99,7 @@ $ mkdir db/newcerts
 $ touch db/index.txt
 $ echo "02" > db/serial
 ```
-It creates your certificates' data base.
+It creates your certificates' database.
 
 Then create `ca.config`
 ```
@@ -140,7 +140,7 @@ emailAddress = optional
 
 IMPORTANT:
 `certificate` and `private_key` options should be specified with 
-your `*.crt` and `.key` files you use.
+your `*.crt` and `*.key` files you use.
 
 
 ```js
@@ -187,7 +187,7 @@ fs.readFile( path.join( rootDir, 'ssl', 'client001'), function(err, data) {
     });
 ```
 NOTE:
-If you discover an error after second certificate 
+If you discover an error after then second certificate generation
 open `/ssl/db/index.txt.attr` and switch `unique_subject = no`
 
 
